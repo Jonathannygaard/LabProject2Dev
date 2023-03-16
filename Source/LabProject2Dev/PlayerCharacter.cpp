@@ -24,6 +24,8 @@ APlayerCharacter::APlayerCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 
+
+	//Gjør at karakteren ikke snur seg før du beveger deg i den retningen
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -37,7 +39,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetCharacterMovement()->MaxWalkSpeed = 330.f;
+	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 
 	// Add the mapping context
 	APlayerController* PlayerController = Cast<APlayerController>(Controller);
@@ -115,6 +117,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhanceInputCom->BindAction(ForwardInput, ETriggerEvent::Completed, this, &APlayerCharacter::Forward);
 		EnhanceInputCom->BindAction(RightInput, ETriggerEvent::Completed, this, &APlayerCharacter::Right);
 
+		EnhanceInputCom->BindAction(AttackInput, ETriggerEvent::Started, this, &APlayerCharacter::Attack);
+
 		EnhanceInputCom->BindAction(MouseXInput, ETriggerEvent::Started, this, &APlayerCharacter::MouseX);
 		EnhanceInputCom->BindAction(MouseYInput, ETriggerEvent::Started, this, &APlayerCharacter::MouseY);
 		EnhanceInputCom->BindAction(MouseXInput, ETriggerEvent::Triggered, this, &APlayerCharacter::MouseX);
@@ -143,6 +147,19 @@ void APlayerCharacter::MouseX(const FInputActionValue& input)
 void APlayerCharacter::MouseY(const FInputActionValue& input)
 {
 	Pitch = input.Get<float>();
+}
+
+void APlayerCharacter::Attack(const FInputActionValue& input)
+{
+	IsAttack = true;
+}
+void APlayerCharacter::ResetAttack()
+{
+	IsAttack = false;
+}
+bool APlayerCharacter::GetIsAttack()
+{
+	return IsAttack;
 }
 
 

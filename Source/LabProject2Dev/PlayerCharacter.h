@@ -49,6 +49,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
 	class UInputAction* MouseYInput;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
+	class UInputAction* AttackInput;
 
 
 private:
@@ -56,6 +59,7 @@ private:
 	void Right(const FInputActionValue& input);
 	void MouseX(const FInputActionValue& input);
 	void MouseY(const FInputActionValue& input);
+	void Attack(const FInputActionValue& input);
 
 	void Movement();
 
@@ -66,10 +70,20 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerVariables | Animation")
 	float InputY;
 
+	UFUNCTION()
+	bool GetIsAttack();
 
+	UFUNCTION(BlueprintCallable)
+	void ResetAttack();
+		
+private:
+	bool IsAttack;
 
+public:
 
 	float Yaw;
 	float Pitch;
 
 };
+
+
